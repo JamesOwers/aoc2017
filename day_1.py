@@ -4,6 +4,16 @@ from utils.tests import test_function
 
 
 def solve_capcha(capcha_str):
+    """Function which calculates the solution to part 1
+    
+    Arguments
+    ---------
+    capcha_str : str, a string of numbers
+    
+    Returns
+    -------
+    total : int, the sum of adjacent matches
+    """
     capcha = [int(cc) for cc in list(capcha_str)]
     total = 0
     for ii in range(len(capcha)):
@@ -13,6 +23,16 @@ def solve_capcha(capcha_str):
 
 
 def solve_capcha2(capcha_str):
+    """Function which calculates the solution to part 2
+    
+    Arguments
+    ---------
+    capcha_str : str, a string of numbers
+    
+    Returns
+    -------
+    total : int, the sum of 'half way' matches
+    """
     capcha = [int(cc) for cc in list(capcha_str)]
     total = 0
     capcha_len = len(capcha)

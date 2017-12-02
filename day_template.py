@@ -4,10 +4,26 @@ from utils.tests import test_function
 
 
 def part_1():
+    """Function which calculates the solution to part 1
+    
+    Arguments
+    ---------
+    
+    Returns
+    -------
+    """
     return None
 
 
 def part_2():
+    """Function which calculates the solution to part 2
+    
+    Arguments
+    ---------
+    
+    Returns
+    -------
+    """
     return None
 
 
@@ -25,6 +41,9 @@ def main(test_datas, functions, puzzle_input=None):
 
 
 if __name__ == "__main__":
+    # Testing data: 
+    #    - each element of input list will be passed to function
+    #    - the relative element in output list is the expected output
     test_data1 = {
         'inputs': [],
         'outputs': []
@@ -33,9 +52,12 @@ if __name__ == "__main__":
         'inputs': [],
         'outputs': []
     }
+    
+    # Code to import the actual puzzle input
     with open('./inputs/day_x.txt') as f:
         puzzle_input = f.read().strip()
 
+    # Main call: performs testing and calculates puzzle outputs
     main(test_datas=[test_data1],
          functions=[part_1],
          puzzle_input=None)

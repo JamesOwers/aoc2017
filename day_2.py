@@ -7,10 +7,32 @@ from fractions import gcd
 
 
 def part_1(X):
+    """
+    Function which calculates the solution to part 1
+    
+    Arguments
+    ---------
+    X : array, a numpy array (spreadsheet!)
+    
+    Returns
+    -------
+    sum : float, the sum of the checksum on each row
+    """
     return np.sum(X.max(axis=1) - X.min(axis=1))
 
 
 def part_2(X):
+    """
+    Function which calculates the solution to part 2
+    
+    Arguments
+    ---------
+    X : array, a numpy array (spreadsheet!)
+    
+    Returns
+    -------
+    sum : float, the sum of the checksum on each row
+    """
     ans = []
     for row in X:
         combs = combinations(row, 2)
@@ -51,7 +73,3 @@ if __name__ == "__main__":
     main(test_datas=[test_data1, test_data2],
          functions=[part_1, part_2],
          puzzle_input=puzzle_input)
-
-    # main(test_datas=[test_data1, test_data2],
-    #      functions=[part_1, part_2],
-    #      puzzle_input=puzzle_input)
