@@ -51,7 +51,7 @@ def main():
     if errors == 0:
         print('Pt. 2 Tests Passed')
 
-    data = np.genfromtxt('./input/day_2.txt', dtype=int)
+    data = np.genfromtxt('./inputs/day_2.txt', dtype=int)
     ans = checksum(data)
     print('Day 2 Pt. 1 Solution: {}'.format(ans))
     ans = checksum2(data)

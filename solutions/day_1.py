@@ -49,7 +49,7 @@ def main():
     if errors == 0:
         print('Pt. 2 Tests Passed')
 
-    with open('./input/day_1.txt') as f:
+    with open('./inputs/day_1.txt') as f:
         data = f.read().strip()
         ans = solve_capcha(data)
         print('Day 1 Pt. 1 Solution: {}'.format(ans))
