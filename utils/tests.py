@@ -17,5 +17,5 @@ def test_function(fun, test_data):
         ans = fun(kk)
         if ans != vv:
             print('fun({}) != {} (={})'.format(kk, vv, ans))
-            errors += 1
+            nr_errors += 1
     return nr_errors
