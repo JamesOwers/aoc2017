@@ -6,19 +6,27 @@ import numpy as np
 
 
 def part_1(memory_loc):
-    """Function which calculates the solution to part 1
-    
+    """Get the manhattan distance from a location to the centre of a
+    (1-indexed) spiral array
+
     Arguments
     ---------
-    
+    memory_loc : int, the location of the starting point. Locations are
+        numbered anticlockwise from the centre, and head right first, e.g.
+        5 4 3
+        6 1 2
+        7 8 9
+
     Returns
     -------
+    nr_steps : int, The manhattan distance from memory_loc to '1'
+        i.e. the centre
     """
     if memory_loc == 1:
         return 0
     else:
         layer_nr = 1
-        while (2*layer_nr-1) ** 2 < memory_loc:  
+        while (2*layer_nr-1) ** 2 < memory_loc:
             layer_nr += 1
         layer_nr -= 1  # 0-indexed layer number
         square_nr = (2 * (layer_nr+1) - 1) ** 2
@@ -29,93 +37,13 @@ def part_1(memory_loc):
         assert side_len == int(side_len)
         side_len = int(side_len)
         side_loc = perim_loc % side_len
-#        print(memory_loc, layer_nr, perim_loc, perim_len, side_len, side_loc,
-#              side_loc - math.floor(side_len / 2))
         nr_steps = layer_nr + abs(side_loc - math.floor(side_len / 2))
         return int(nr_steps)
 
 
-#def memory_loc_to_coords(memory_loc):
-#    """
-#    """
-#    if memory_loc == 1:
-#        layer_nr, side_nr, side_loc = 0, 0, 0
-#    else:
-#        layer_nr = 1
-#        while (2*layer_nr-1) ** 2 < memory_loc:  
-#            layer_nr += 1
-#        layer_nr -= 1  # 0-indexed layer number
-#        square_nr = (2 * (layer_nr+1) - 1) ** 2
-#        square_nr_prev = (2 * (layer_nr) - 1) ** 2
-#        perim_loc = memory_loc - square_nr_prev
-#        perim_len = square_nr - square_nr_prev
-#        side_len = perim_len / 4
-#        assert side_len == int(side_len)
-#        side_len = int(side_len)
-#        side_loc = perim_loc % side_len
-#        side_nr = int(math.floor(perim_loc / side_len)) % 4
-#    return layer_nr, side_nr, side_loc
-#
-#
-#def coords_to_memory_loc(layer_nr, side_nr, side_loc):
-#    square_nr = (2 * (layer_nr+1) - 1) ** 2
-#    square_nr_prev = (2 * (layer_nr) - 1) ** 2
-#    perim_len = square_nr - square_nr_prev
-#    side_len = int(perim_len / 4)
-#    if side_nr == 0 and side_loc == 0:
-#        memory_loc = square_nr
-#    else:
-#        memory_loc = square_nr_prev + side_nr*side_len + side_loc
-#    return memory_loc
-#    
-#
-#def get_neighbours(memory_loc):
-#    """
-#    """
-#    layer_nr, side_nr, side_loc = memory_loc_to_coords(memory_loc)
-#    square_nr_next = (2 * (layer_nr+2) - 1) ** 2
-#    square_nr = (2 * (layer_nr+1) - 1) ** 2
-#    square_nr_prev = (2 * (layer_nr) - 1) ** 2
-#    perim_len = square_nr - square_nr_prev
-#    side_len = int(perim_len / 4)
-#    side_len_prev = side_len - 2
-#    neighbours = []
-#    if layer_nr == 1:
-#        neighbours = [1]
-#    elif layer_nr >= 2:
-#        is_corner = side_loc == 0
-#        # look back
-#        neighbours += [memory_loc - 1]
-#        # in
-#        if not is_corner:
-#            
-#            in_id = coords_to_memory_loc(layer_nr-1, side_nr, side_loc)
-#        # in and back
-#        # in and forward
-#    
-#    else:
-#        raise ValueError()
-#    return neighbours
-    
-
-
-#def construct_matrix(stop_value):
-#    """Constructs a dictionary of memory_loc co-ordinates to values
-#    """
-#    memory_loc = 1
-#    value = 1
-#    matrix = {memory_loc: value}
-#    while value < stop_value:
-#        memory_loc += 1
-#        total = 0
-#        for neighbour_loc in get_neighbours(memory_loc):
-#            if neighbour_loc in matrix.keys():
-#                total += matrix[neighbour_loc] 
-#        matrix[memory_loc] = total
-#    return matrix
-    
-
 def rehouse_matrix(matrix):
+    """Convenience function to create a zero pad border around matrix
+    """
     old_shape = matrix.shape
     new_shape = (old_shape[0] + 2, old_shape[1] + 2)
     old_matrix = matrix
@@ -125,6 +53,8 @@ def rehouse_matrix(matrix):
 
 
 def to_spiral(A):
+    """Converts a matrix with normal indexing, to spiral indexing
+    """
     A = np.array(A)
     B = np.empty_like(A)
     B.flat[base_spiral(*A.shape)] = A.flat
@@ -132,33 +62,44 @@ def to_spiral(A):
 
 
 def from_spiral(A):
+    """Converts a matrix with spiral indexing back to normal indexing
+    """
     A = np.array(A)
     return A.flat[base_spiral(*A.shape)].reshape(A.shape)
 
 
-def spiral_ccw(A):
+def spiral_cw(A):
+    """Creates a list of values in the order of a spiral index by
+    slicing off the bottom row and rotating the remaining matrix
+    anticlockwise repeatedly. Row values are recorded in reverse order
+    such that, when read back, you read the bottom right matrix entry
+    first, and spiral clockwise and inwards
+    """
     A = np.array(A)
     out = []
-    while(A.size):
+    while A.size:
         out.append(A[-1][::-1])  # last row reversed
         A = A[:-1].T[::-1]       # cut last and rotate anticlock
     return np.concatenate(out)
 
 
 def base_spiral(nrow, ncol):
-    return spiral_ccw(np.arange(nrow*ncol).reshape(nrow,ncol))[::-1]
- 
+    """Creates a spiral of size nrow, ncol"""
+    return spiral_cw(np.arange(nrow*ncol).reshape(nrow, ncol))[::-1]
+
 
 def memory_loc_to_coord(memory_loc, shape):
+    """Gets the matrix coordinates of a location in a spiral array
+    """
     nr_elems = shape**2
     shape = (shape, shape)
     matrix = to_spiral(np.arange(1, nr_elems+1).reshape(shape))
     coords = np.argwhere(matrix == memory_loc)[0]
     return coords
 
-    
+
 def construct_matrix(stop_value):
-    """Builds numpy array sequentially
+    """Builds numpy array sequentially from centre outwards
     """
     memory_loc = 1
     patch_sum = 1
@@ -168,9 +109,7 @@ def construct_matrix(stop_value):
     side_len = 1
     while patch_sum < stop_value:
         memory_loc += 1
-        print('Begin:', memory_loc)
         if memory_loc - 1 == square_nr:
-            print('Rehousing')
             matrix = rehouse_matrix(matrix)
             layer_nr += 1
             square_nr = (2 * (layer_nr) - 1) ** 2
@@ -181,24 +120,24 @@ def construct_matrix(stop_value):
         max0 = idx0 + 2 if idx0 < side_len else side_len+1  # exclusive
         idx1 = coords[1]
         min1 = idx1 - 1 if idx1 > 0 else 0
-        max1 = idx1 + 2 if idx1 < side_len else side_len+1 
+        max1 = idx1 + 2 if idx1 < side_len else side_len+1
         patch_sum = np.sum(matrix[min0:max0, min1:max1])
         matrix[idx0, idx1] = patch_sum
-        print(coords, min0, max0, min1, max1)
-        print(matrix)
     return matrix
 
 
-def part_2(idx):
+def part_2(stop_value):
     """Function which calculates the solution to part 2
-    
+
     Arguments
     ---------
-    
+    stop_value : int, value at which to stop building the spiral array
+
     Returns
     -------
+    max value in the constructed array
     """
-    return None
+    return np.max(construct_matrix(stop_value))
 
 
 def main(test_datas, functions, puzzle_input=None):
@@ -215,7 +154,7 @@ def main(test_datas, functions, puzzle_input=None):
 
 
 if __name__ == "__main__":
-    # Testing data: 
+    # Testing data:
     #    - each element of input list will be passed to function
     #    - the relative element in output list is the expected output
     test_data1 = {
@@ -223,18 +162,14 @@ if __name__ == "__main__":
         'outputs': [0, 3, 2, 31, 4, 3, 4, 1, 2]
     }
     test_data2 = {
-        'inputs': [1, 2, 3, 4, 5, 6, 7, 8, 9],
+        'inputs': [1, 1, 2, 4, 5, 10, 11, 23, 25],
         'outputs': [1, 1, 2, 4, 5, 10, 11, 23, 25]
     }
-    
+
     # Code to import the actual puzzle input
     puzzle_input = 347991
 
     # Main call: performs testing and calculates puzzle outputs
-    main(test_datas=[test_data1],
-         functions=[part_1],
+    main(test_datas=[test_data1, test_data2],
+         functions=[part_1, part_2],
          puzzle_input=puzzle_input)
-
-    # main(test_datas=[test_data1, test_data2],
-    #      functions=[part_1, part_2],
-    #      puzzle_input=puzzle_input)
