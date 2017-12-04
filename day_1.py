@@ -1,6 +1,6 @@
 from __future__ import division, print_function
 import os
-from utils.tests import test_function
+from my_utils.tests import test_function
 
 
 def solve_capcha(capcha_str):
