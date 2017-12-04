@@ -23,28 +23,6 @@ def part_1(passphrases):
     return sum(valid)
 
 
-def anagram_check(word_list):
-    for jj, word in enumerate(word_list):  # anagram search
-        word_letters = list(word)
-        # only need to check forward
-        for other_word in word_list[jj+1:]:
-            is_anagram = 1
-            other_word_letters = list(other_word)
-            if len(other_word_letters) != len(word_letters):
-                is_anagram = 0
-            else:
-                for letter in word_letters:
-                    if letter not in other_word_letters:
-                        is_anagram = 0
-                        break
-                    else:
-                        other_word_letters.remove(letter) 
-            # no need to continue with pp if anagram found
-            if is_anagram:
-                return 1
-    return 0
-
-
 def part_2(passphrases):
     """Function which calculates the solution to part 2
     
@@ -54,20 +32,11 @@ def part_2(passphrases):
     Returns
     -------
     """
-    valid = []    
-    for pp in passphrases:
-        pp_words = pp.split()
-        pp_set = set(pp_words)
-        if len(pp_words) == len(pp_set):  # no repeated words
-            contains_anagram = anagram_check(pp_words)
-            if contains_anagram == 1:
-                vv = 0
-            else:
-                vv = 1
-        else:  # there are repeated words
-            vv = 0
-        valid += [vv]
-    return sum(valid)
+    pp_list = [pp.split() for pp in passphrases]
+    pp_sorted_words = [[''.join(sorted(word)) for word in pp] 
+                       for pp in pp_list]
+    pp_sorted_words = [' '.join(pp) for pp in pp_sorted_words]
+    return part_1(pp_sorted_words)
 
 
 def main(test_datas, functions, puzzle_input=None):
