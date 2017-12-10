@@ -51,8 +51,9 @@ def make_dense(hash_map):
 
 
 def to_hex(hash_map):
-    hex_map = [hex(ii).split('x')[1] for ii in hash_map]
-    hex_map = ['0{}'.format(ii) if len(ii)==1 else ii for ii in hex_map]
+#    hex_map = [hex(ii).split('x')[1] for ii in hash_map]
+#    hex_map = ['0{}'.format(ii) if len(ii)==1 else ii for ii in hex_map]
+    hex_map = ['{:02x}'.format(ii) for ii in hash_map]
     return ''.join(hex_map)
 
 
