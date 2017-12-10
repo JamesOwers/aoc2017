@@ -4,11 +4,11 @@ from my_utils.tests import test_function
 
 
 def create_hash(lengths, hash_length=256, preproc='list', rounds=1):
-    #    \021  17  DC1  \x11  ^Q    (Device control 1) (XON) (Default UNIX START char.)
+#    [chr(ii) for ii in [17, 31, 73, 47, 23]]
+#    Out[43]: ['\x11', '\x1f', 'I', '/', '\x17']
+#    \021  17  DC1  \x11  ^Q    (Device control 1) (XON) (Default UNIX START char.)
 #    \037  31  US   \x1F  ^_    (Unit separator, Information separator one)
 #    \027  23  ETB  \x17  ^W    (End of transmission block)
-#    [chr(ii) for ii in [17, 31, 73, 47, 23]]
-#Out[43]: ['\x11', '\x1f', 'I', '/', '\x17']
     if preproc == 'list':
         lengths = [int(ll) for ll in lengths.split(',')]
     if preproc == 'ascii':
@@ -85,8 +85,10 @@ def part_2(lengths):
     return hex_str
 
 
-def main(test_datas, functions, puzzle_input=None):
-    for ii, (test_data, fun) in enumerate(zip(test_datas, functions)):
+def main(test_datas, functions, puzzle_input=None, test_functions=None):
+    if test_functions is None:
+        test_functions = functions
+    for ii, (test_data, fun) in enumerate(zip(test_datas, test_functions)):
         nr_errors = test_function(fun, test_data)
         if nr_errors == 0:
             print('Pt. {} Tests Passed'.format(ii+1))
@@ -122,6 +124,7 @@ if __name__ == "__main__":
     part_1_test = lambda lengths: part_1(lengths, hash_length=5)
     # Main call: performs testing and calculates puzzle outputs
     main(test_datas=[test_data1, test_data2],
+         test_functions=[part_1_test, part_2],
          functions=[part_1, part_2],
          puzzle_input=puzzle_input)
 
