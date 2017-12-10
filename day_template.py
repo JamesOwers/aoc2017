@@ -56,6 +56,7 @@ if __name__ == "__main__":
     # Code to import the actual puzzle input
     with open('./inputs/day_x.txt') as f:
         puzzle_input = f.read().strip()
+#        puzzle_input = [line.rstrip('\n') for line in f]
 
     # Main call: performs testing and calculates puzzle outputs
     main(test_datas=[test_data1],
