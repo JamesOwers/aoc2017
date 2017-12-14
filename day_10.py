@@ -27,7 +27,7 @@ def create_hash(lengths, hash_length=256, preproc='list', rounds=1):
 #            print(ll, start_pos, end_pos)
             if ll > 1:
                 for ii in range(ll // 2):
-                    idx_end = end_pos - ii - 1
+                    idx_end = (end_pos - ii - 1) % hash_length
                     idx_start = (start_pos + ii) % hash_length
                     end_val = hash_map[idx_end]
                     start_val = hash_map[idx_start]
@@ -70,7 +70,7 @@ def part_1(lengths, hash_length=256):
     return hash_map[0] * hash_map[1]
 
 
-def part_2(lengths):
+def part_2(lengths, hash_length=256):
     """Function which calculates the solution to part 2
     
     Arguments
@@ -79,7 +79,8 @@ def part_2(lengths):
     Returns
     -------
     """
-    hash_map = create_hash(lengths, hash_length=256, preproc='ascii', rounds=64)
+    hash_map = create_hash(lengths, hash_length=hash_length, 
+                           preproc='ascii', rounds=64)
     dense_map = make_dense(hash_map)
     hex_str = to_hex(dense_map)
     return hex_str
